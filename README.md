@@ -29,4 +29,4 @@ The running of this program requires several libraries these include:
 
 ## License
 
-This project is licensed under the Mozilla Public License 2.0 - see the [LICENSE](https://github.com/ShaanCoding/Identicons/blob/master/LICENSE) files for details
+This project is licensed under the Mozilla Public License 2.0 - see the [LICENSE](https://github.com/ShaanCoding/Identicons/blob/master/LICENSE.md) files for details
