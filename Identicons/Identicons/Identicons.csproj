@@ -67,6 +67,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Library\HashingAlgorithms\SHA256.cs" />
     <Compile Include="Library\Identicon.cs" />
     <Compile Include="Library\IdenticonUtils.cs" />
     <Compile Include="MainWindow.xaml.cs">

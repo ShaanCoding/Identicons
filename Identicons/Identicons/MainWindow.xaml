@@ -5,20 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Identicons"
         mc:Ignorable="d"
-        Title="Identicon" Height="450" Width="800" Icon="Assets/icon.ico">
+        Title="Identicon" Height="450" Width="800" Icon="Assets/icon.ico" ContentRendered="Identicon_ContentRendered">
     <Grid>
-        <TextBox x:Name="UserNameTextBox" HorizontalAlignment="Left" Height="23" Margin="318,63,0,0" TextWrapping="Wrap" Text="UserName" VerticalAlignment="Top" Width="120" TextChanged="UserNameTextBox_TextChanged"/>
+        <TextBox x:Name="UserNameTextBox" HorizontalAlignment="Left" Height="23" Margin="20,380,0,0" TextWrapping="Wrap" Text="UserName" VerticalAlignment="Top" Width="120" TextChanged="UserNameTextBox_TextChanged"/>
 
         <UniformGrid x:Name="EncyptionTypeRadioPanel">
-            <RadioButton x:Name="SHA1" GroupName="EncryptionType" Content="SHA-1"/>
-            <RadioButton x:Name="SHA256" GroupName="EncryptionType" Content="SHA-256"/>
-            <RadioButton x:Name="SHA384" GroupName="EncryptionType" Content="SHA-384"/>
-            <RadioButton x:Name="SHA512" GroupName="EncryptionType" Content="SHA-512"/>
+            <RadioButton x:Name="MD5" GroupName="EncryptionType" Content="MD5" Checked="MD5_Checked"/>
+            <RadioButton x:Name="SHA1" GroupName="EncryptionType" Content="SHA-1" Checked="SHA1_Checked"/>
+            <RadioButton x:Name="SHA256" GroupName="EncryptionType" Content="SHA-256" Checked="SHA256_Checked"/>
+            <RadioButton x:Name="SHA384" GroupName="EncryptionType" Content="SHA-384" Checked="SHA384_Checked"/>
+            <RadioButton x:Name="SHA512" GroupName="EncryptionType" Content="SHA-512" Checked="SHA512_Checked"/>
         </UniformGrid>
 
-        <TextBox x:Name="SizeTextBox" HorizontalAlignment="Left" Height="23" Margin="145,164,0,0" TextWrapping="Wrap" Text="Size" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="SaltTextBox" HorizontalAlignment="Left" Height="23" Margin="328,166,0,0" TextWrapping="Wrap" Text="Salt" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="RoundsTextBox" HorizontalAlignment="Left" Height="23" Margin="502,167,0,0" TextWrapping="Wrap" Text="Rounds" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="SizeTextBox" HorizontalAlignment="Left" Height="23" Margin="145,164,0,0" TextWrapping="Wrap" Text="6" VerticalAlignment="Top" Width="120" TextChanged="SizeTextBox_TextChanged"/>
+        <TextBox x:Name="SaltTextBox" HorizontalAlignment="Left" Height="23" Margin="328,166,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="SaltTextBox_TextChanged"/>
+        <TextBox x:Name="RoundsTextBox" HorizontalAlignment="Left" Height="23" Margin="502,167,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="120" TextChanged="RoundsTextBox_TextChanged"/>
         <Image x:Name="IdenticonCanvas" HorizontalAlignment="Left" Height="180" Margin="279,218,0,0" VerticalAlignment="Top" Width="180"/>
 
     </Grid>

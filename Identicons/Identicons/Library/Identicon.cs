@@ -28,7 +28,9 @@ namespace Identicons.Library
             this.rounds = rounds;
             this.salt = salt;
 
-            if(salt != null && salt != "")
+            //https://crypto.stackexchange.com/questions/12795/why-do-i-need-to-add-the-original-salt-to-each-hash-iteration-of-a-password Salting is best if done once not during every iteration.
+
+            if (salt != null && salt != "")
             {
                 finalizedHash = userName + salt;
             }
@@ -67,7 +69,7 @@ namespace Identicons.Library
 
             Bitmap returnBMP = new Bitmap(resolutionInPixels, resolutionInPixels);
 
-            int cellUnitSize = resolutionInPixels / size;
+           int cellUnitSize = resolutionInPixels / size;
 
             using (Graphics g = Graphics.FromImage(returnBMP))
             {
@@ -123,6 +125,8 @@ namespace Identicons.Library
         {
             switch(encryptionType)
             {
+                case IdenticonUtils.EncryptionTypeEnum.MD5:
+                    return GetMD5Hash(inputString);
                 case IdenticonUtils.EncryptionTypeEnum.SHA_1:
                     return GetSHA1Hash(inputString);
                 case IdenticonUtils.EncryptionTypeEnum.SHA_256:
@@ -132,7 +136,7 @@ namespace Identicons.Library
                 case IdenticonUtils.EncryptionTypeEnum.SHA_512:
                     return GetSHA512Hash(inputString);
                 default:
-                    return null;
+                    throw new ArgumentException($"ERROR: Unspecified Hash Algorithm '{encryptionType}'", nameof(encryptionType));
             }
         }
 
@@ -165,6 +169,14 @@ namespace Identicons.Library
             using (SHA1Managed sha1 = new SHA1Managed())
             {
                 return BitConverter.ToString(sha1.ComputeHash(Encoding.UTF8.GetBytes(inputString))).Replace("-", "");
+            }
+        }
+
+        private string GetMD5Hash(string inputString)
+        {
+            using(MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
+            {
+                return BitConverter.ToString(md5.ComputeHash(Encoding.UTF8.GetBytes(inputString))).Replace("-", "");
             }
         }
     }
