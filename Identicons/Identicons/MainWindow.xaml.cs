@@ -32,7 +32,7 @@ namespace Identicons
         private string salt = "";
         private int size = 6;
         private int rounds = 0;
-        private int quality = 512;
+        private int quality = 600;
 
         private Identicon identicon;
 

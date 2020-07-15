@@ -58,14 +58,6 @@ namespace Identicons.Library
 
         public Bitmap CreateIcon()
         {
-            int resolutionInPixels = 180;
-
-            Brush redBrush = Brushes.Red;
-            Brush greenBrush = Brushes.LimeGreen;
-            Brush cyanBrush= Brushes.LightBlue;
-            Brush orangeBrush = Brushes.Orange;
-            Brush yellowBrush= Brushes.Yellow;
-            Brush pinkBrush = Brushes.HotPink;
             Brush whiteBrush = Brushes.White;
 
             int red = Convert.ToInt32(finalizedHash.Substring(finalizedHash.Length - 6, 2), 16);
@@ -74,12 +66,14 @@ namespace Identicons.Library
 
             Brush tempBrush = new SolidBrush(Color.FromArgb(red, green, blue));
 
-            Bitmap returnBMP = new Bitmap(resolutionInPixels, resolutionInPixels);
+            Bitmap returnBMP = new Bitmap(quality, quality);
 
-           int cellUnitSize = resolutionInPixels / size;
+           int cellUnitSize = quality / size;
 
             using (Graphics g = Graphics.FromImage(returnBMP))
             {
+                g.FillRectangle(whiteBrush, new Rectangle(0, 0, quality, quality));
+
                 for (int i = 0; i < shaMatrix.GetLength(0); i++)
                 {
                     for (int j = 0; j < shaMatrix.GetLength(1); j++)
