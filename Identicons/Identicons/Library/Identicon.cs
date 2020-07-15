@@ -16,17 +16,19 @@ namespace Identicons.Library
         private int size;
         private int rounds;
         private string salt;
+        private int quality;
 
         private string finalizedHash;
         bool[,] shaMatrix;
 
-        public Identicon(string userName, IdenticonUtils.EncryptionTypeEnum encryptionType, int size, int rounds, string salt)
+        public Identicon(string userName, IdenticonUtils.EncryptionTypeEnum encryptionType, int size, int rounds, string salt, int quality)
         {
             this.userName = userName;
             this.encryptionType = encryptionType;
             this.size = size;
             this.rounds = rounds;
             this.salt = salt;
+            this.quality = quality;
 
             //https://crypto.stackexchange.com/questions/12795/why-do-i-need-to-add-the-original-salt-to-each-hash-iteration-of-a-password Salting is best if done once not during every iteration.
 
@@ -64,8 +66,13 @@ namespace Identicons.Library
             Brush orangeBrush = Brushes.Orange;
             Brush yellowBrush= Brushes.Yellow;
             Brush pinkBrush = Brushes.HotPink;
+            Brush whiteBrush = Brushes.White;
 
-            Brush tempBrush = Brushes.LightBlue;
+            int red = Convert.ToInt32(finalizedHash.Substring(finalizedHash.Length - 6, 2), 16);
+            int green = Convert.ToInt32(finalizedHash.Substring(finalizedHash.Length - 4, 2), 16);
+            int blue = Convert.ToInt32(finalizedHash.Substring(finalizedHash.Length - 2, 2), 16);
+
+            Brush tempBrush = new SolidBrush(Color.FromArgb(red, green, blue));
 
             Bitmap returnBMP = new Bitmap(resolutionInPixels, resolutionInPixels);
 
@@ -80,6 +87,10 @@ namespace Identicons.Library
                         if (shaMatrix[i, j])
                         {
                             g.FillRectangle(tempBrush, new Rectangle(i * cellUnitSize, j * cellUnitSize, cellUnitSize, cellUnitSize));
+                        }
+                        else
+                        {
+                            g.FillRectangle(whiteBrush, new Rectangle(i * cellUnitSize, j * cellUnitSize, cellUnitSize, cellUnitSize));
                         }
                     }
                 }

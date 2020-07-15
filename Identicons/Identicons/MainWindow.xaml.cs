@@ -1,5 +1,5 @@
 ﻿using Identicons.Library;
-
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -32,6 +32,7 @@ namespace Identicons
         private string salt = "";
         private int size = 6;
         private int rounds = 0;
+        private int quality = 512;
 
         private Identicon identicon;
 
@@ -44,7 +45,7 @@ namespace Identicons
         {
             if(userName != "" && isLoaded)
             {
-                identicon = new Identicon(userName, encryptionType, size, rounds, salt);
+                identicon = new Identicon(userName, encryptionType, size, rounds, salt, quality);
                 IdenticonCanvas.Source = IdenticonUtils.Convert(identicon.CreateIcon());
             }
         }
@@ -115,10 +116,48 @@ namespace Identicons
             UpdateIdenticon();
         }
 
+        private void QualityTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Int32.TryParse(QualityTextBox.Text, out int quality);
+            SetQuality(quality);
+
+            UpdateIdenticon();
+        }
+
+        private void SetQuality(int quality)
+        {
+            if(quality > 0)
+            {
+                this.quality = quality;
+            }
+        }
+
         private void Identicon_ContentRendered(object sender, EventArgs e)
         {
             isLoaded = true;
             UpdateIdenticon();
+        }
+
+        private void IdenticonCanvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                using (CommonSaveFileDialog saveFileDialog = new CommonSaveFileDialog())
+                {
+                    saveFileDialog.AlwaysAppendDefaultExtension = true;
+                    saveFileDialog.Filters.Add(new CommonFileDialogFilter("PNG Files", "*.png"));
+                    saveFileDialog.DefaultExtension = "png";
+
+                    if (saveFileDialog.ShowDialog() == CommonFileDialogResult.Ok)
+                    {
+                        identicon.CreateIcon().Save(saveFileDialog.FileName);
+                    }
+                }
+            }
+            catch(IOException ex)
+            {
+                MessageBox.Show("An exception has occured, the image was unable to be saved.");
+            }
         }
     }
 }
