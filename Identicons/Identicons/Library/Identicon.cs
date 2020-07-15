@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using System.Security.Cryptography;
 using System.Drawing;
 
@@ -11,39 +10,32 @@ namespace Identicons.Library
 {
     class Identicon
     {
-        private string userName;
-        private IdenticonUtils.EncryptionTypeEnum encryptionType;
-        private int size;
-        private int rounds;
-        private string salt;
-        private int quality;
+        private readonly string userName;
+        private readonly int size;
+        private readonly int quality;
 
         private string finalizedHash;
-        bool[,] shaMatrix;
+        private bool[,] shaMatrix;
 
         public Identicon(string userName, IdenticonUtils.EncryptionTypeEnum encryptionType, int size, int rounds, string salt, int quality)
         {
             this.userName = userName;
-            this.encryptionType = encryptionType;
             this.size = size;
-            this.rounds = rounds;
-            this.salt = salt;
             this.quality = quality;
 
-            //https://crypto.stackexchange.com/questions/12795/why-do-i-need-to-add-the-original-salt-to-each-hash-iteration-of-a-password Salting is best if done once not during every iteration.
+            InitalizeHash(encryptionType, rounds, salt);
+        }
 
-            if (salt != null && salt != "")
-            {
-                finalizedHash = userName + salt;
-            }
-            else
-            {
-                finalizedHash = userName;
-            }
+        private void InitalizeHash(IdenticonUtils.EncryptionTypeEnum encryptionType, int rounds, string salt)
+        {
+            //https://crypto.stackexchange.com/questions/12795/why-do-i-need-to-add-the-original-salt-to-each-hash-iteration-of-a-password
+            //Salting is best if done once not during every iteration.
 
-            if(rounds > 0)
+            finalizedHash = (string.IsNullOrEmpty(salt)) ? userName + salt : userName;
+
+            if (rounds > 0)
             {
-                for(int i = 0; i < rounds; i++)
+                for (int i = 0; i < rounds; i++)
                 {
                     finalizedHash = GenerateHash(finalizedHash, encryptionType);
                 }
@@ -53,10 +45,42 @@ namespace Identicons.Library
                 finalizedHash = GenerateHash(finalizedHash, encryptionType);
             }
 
-            shaMatrix = GetBooleanIcon(finalizedHash, size);
+            shaMatrix = GetBooleanMatrix(finalizedHash, size);
         }
 
-        public Bitmap CreateIcon()
+        private bool[,] GetBooleanMatrix(string finalizedHash, int size)
+        {
+            byte[] hashByteArray = GetHashArray(finalizedHash);
+
+
+            bool[,] splitUpMatrix = new bool[size, size];
+            for (int x = 0; x < size; x++)
+            {
+                int i = x < 3 ? x : size - 1 - x;
+                i = i >= hashByteArray.Length ? i % hashByteArray.Length : i;
+                for (int y = 0; y < size; y++)
+                {
+                    if ((hashByteArray[i] >> y & 1) == 1)
+                    {
+                        splitUpMatrix[x, y] = true;
+                    }
+                    else
+                    {
+                        splitUpMatrix[x, y] = false;
+                    }
+                }
+            }
+
+            return splitUpMatrix;
+        }
+
+        private byte[] GetHashArray(string finalizedHash)
+        {
+            string binaryString = string.Join(string.Empty, finalizedHash.Select(c => Convert.ToString(Convert.ToInt32(c.ToString(), 16), 2).PadLeft(4, '0')));
+            return Convert.FromBase64String(binaryString);
+        }
+
+        public Bitmap GetImage()
         {
             Brush whiteBrush = Brushes.White;
 
@@ -68,7 +92,7 @@ namespace Identicons.Library
 
             Bitmap returnBMP = new Bitmap(quality, quality);
 
-           int cellUnitSize = quality / size;
+            int cellUnitSize = quality / size;
 
             using (Graphics g = Graphics.FromImage(returnBMP))
             {
@@ -93,38 +117,7 @@ namespace Identicons.Library
             return returnBMP;
         }
 
-        private bool[,] GetBooleanIcon(string finalizedHash, int size)
-        {
-            byte[] hashByteArray = GetHashArray(finalizedHash);
-
-            bool[,] splitUpMatrix = new bool[size, size];
-
-            for (int x = 0; x < size; x++)
-            {
-                int i = x < 3 ? x : size - 1 - x;
-                i = i >= hashByteArray.Length ? i % hashByteArray.Length : i;
-                for (int y = 0; y < size; y++)
-                {
-                    if ((hashByteArray[i] >> y & 1) == 1)
-                    {
-                        splitUpMatrix[x, y] = true;
-                    }
-                    else
-                    {
-                        splitUpMatrix[x, y] = false;
-                    }
-                }
-            }
-
-
-            return splitUpMatrix;
-        }
-
-        private byte[] GetHashArray(string finalizedHash)
-        {
-            string binaryString = string.Join(string.Empty, finalizedHash.Select(c => Convert.ToString(Convert.ToInt32(c.ToString(), 16), 2).PadLeft(4, '0')));
-            return Convert.FromBase64String(binaryString);
-        }
+        #region GenerateHashString
 
         private string GenerateHash(string inputString, IdenticonUtils.EncryptionTypeEnum encryptionType)
         {
@@ -184,5 +177,7 @@ namespace Identicons.Library
                 return BitConverter.ToString(md5.ComputeHash(Encoding.UTF8.GetBytes(inputString))).Replace("-", "");
             }
         }
+
+        #endregion
     }
 }
