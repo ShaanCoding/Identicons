@@ -89,6 +89,7 @@ namespace Identicons
         {
             Int32.TryParse(SizeTextBox.Text, out int size);
             SetSize(size);
+
             UpdateIdenticon();
         }
 

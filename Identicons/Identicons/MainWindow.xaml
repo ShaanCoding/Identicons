@@ -5,22 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Identicons"
         mc:Ignorable="d"
-        Title="Identicon" Height="450" Width="800" Icon="Assets/icon.ico" ContentRendered="Identicon_ContentRendered">
+        Title="Identicon" Height="450" Width="800" Icon="Assets/icon.ico" ContentRendered="Identicon_ContentRendered" MinWidth="800" MinHeight="450">
     <Grid>
-        <TextBox x:Name="UserNameTextBox" HorizontalAlignment="Left" Height="23" Margin="20,380,0,0" TextWrapping="Wrap" Text="UserName" VerticalAlignment="Top" Width="120" TextChanged="UserNameTextBox_TextChanged"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
 
-        <UniformGrid x:Name="EncyptionTypeRadioPanel">
-            <RadioButton x:Name="MD5" GroupName="EncryptionType" Content="MD5" Checked="MD5_Checked"/>
-            <RadioButton x:Name="SHA1" GroupName="EncryptionType" Content="SHA-1" Checked="SHA1_Checked"/>
-            <RadioButton x:Name="SHA256" GroupName="EncryptionType" Content="SHA-256" Checked="SHA256_Checked"/>
-            <RadioButton x:Name="SHA384" GroupName="EncryptionType" Content="SHA-384" Checked="SHA384_Checked"/>
-            <RadioButton x:Name="SHA512" GroupName="EncryptionType" Content="SHA-512" Checked="SHA512_Checked"/>
+        <UniformGrid Grid.Row="0" Rows="2" Columns="1">
+        <Label Content="UserName:" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="0, 10"/>
+        <TextBox x:Name="UserNameTextBox" Grid.Row="0" HorizontalAlignment="Center" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="120" TextChanged="UserNameTextBox_TextChanged"/>
+        </UniformGrid>
+        
+        <UniformGrid Grid.Row="1" Rows="2" Columns="3" HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <Label Content="Size:" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="Salt:" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="Rounds:" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox x:Name="SizeTextBox" Height="23" TextWrapping="Wrap" Text="6" Width="120" TextChanged="SizeTextBox_TextChanged" Margin="20, 0"/>
+            <TextBox x:Name="SaltTextBox" Height="23" TextWrapping="Wrap" Text="" Width="120" TextChanged="SaltTextBox_TextChanged" Margin="20, 0"/>
+            <TextBox x:Name="RoundsTextBox" Height="23" TextWrapping="Wrap" Text="0" Width="120" TextChanged="RoundsTextBox_TextChanged" Margin="20, 0"/>
         </UniformGrid>
 
-        <TextBox x:Name="SizeTextBox" HorizontalAlignment="Left" Height="23" Margin="145,164,0,0" TextWrapping="Wrap" Text="6" VerticalAlignment="Top" Width="120" TextChanged="SizeTextBox_TextChanged"/>
-        <TextBox x:Name="SaltTextBox" HorizontalAlignment="Left" Height="23" Margin="328,166,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="SaltTextBox_TextChanged"/>
-        <TextBox x:Name="RoundsTextBox" HorizontalAlignment="Left" Height="23" Margin="502,167,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="120" TextChanged="RoundsTextBox_TextChanged"/>
-        <Image x:Name="IdenticonCanvas" HorizontalAlignment="Left" Height="180" Margin="279,218,0,0" VerticalAlignment="Top" Width="180"/>
+        <UniformGrid Grid.Row="2" Rows="1" Columns="3" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0, 10">
+            <RadioButton x:Name="MD5" GroupName="EncryptionType" Content="MD5" Checked="MD5_Checked" IsChecked="True" Padding="20, 0"/>
+            <RadioButton x:Name="SHA1" GroupName="EncryptionType" Content="SHA-1" Checked="SHA1_Checked" Padding="20, 0"/>
+            <RadioButton x:Name="SHA256" GroupName="EncryptionType" Content="SHA-256" Checked="SHA256_Checked" Padding="20, 0"/>
+        </UniformGrid>
+
+        <UniformGrid Grid.Row="3" Rows="1" Columns="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 10">
+            <RadioButton x:Name="SHA384" GroupName="EncryptionType" Content="SHA-384" Checked="SHA384_Checked" Padding="20, 0"/>
+            <RadioButton x:Name="SHA512" GroupName="EncryptionType" Content="SHA-512" Checked="SHA512_Checked" Padding="20, 0"/>
+        </UniformGrid>
+        
+        <Image x:Name="IdenticonCanvas" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="4"/>
 
     </Grid>
 </Window>
