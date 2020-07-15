@@ -31,7 +31,7 @@ namespace Identicons.Library
             //https://crypto.stackexchange.com/questions/12795/why-do-i-need-to-add-the-original-salt-to-each-hash-iteration-of-a-password
             //Salting is best if done once not during every iteration.
 
-            finalizedHash = (string.IsNullOrEmpty(salt)) ? userName + salt : userName;
+            finalizedHash = !(string.IsNullOrEmpty(salt)) ? userName + salt : userName;
 
             if (rounds > 0)
             {

@@ -59,7 +59,7 @@ namespace Identicons
 
         private void UpdateIdenticon()
         {
-            if(userName != "" && isLoaded)
+            if(!string.IsNullOrEmpty(userName) && isLoaded)
             {
                 identicon = new Identicon(userName, encryptionType, size, rounds, salt, quality);
                 IdenticonCanvas.Source = Convert(identicon.GetImage());
